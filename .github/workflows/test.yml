@@ -129,23 +129,37 @@ jobs:
         set PATH=C:\sde;%PATH%
         ci\run.cmd build-release -DKFR_ARCH_TESTS=sse2,ssse3,sse42,avx,avx2,avx512 -DKFR_ENABLE_MULTIARCH=ON -DKFR_USE_SDE=ON -DKFR_ARCH=sse2 -DCMAKE_BUILD_TYPE=Release
 
-  windows2022-clang17-android-arm:
+  windows2022-clang-android-arm:
     runs-on: windows-2022
     steps:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Tests
       shell: cmd
-      run: choco install llvm --version 17.0.6 --no-progress -y
+      run: |
+        choco install ninja --no-progress -y
+        echo y > "%TMP%\always_yes"
+        echo y >> "%TMP%\always_yes"
+        mkdir "%USERPROFILE%\.android"
+        echo > "%USERPROFILE%\.android\repositories.cfg"
+        call "%ANDROID_HOME%\tools\bin\sdkmanager.bat" "ndk-bundle" < %TMP%\always_yes
+        ci\run.cmd build-release -DCMAKE_TOOLCHAIN_FILE="%ANDROID_HOME%\ndk-bundle\build\cmake\android.toolchain.cmake" -DANDROID_ABI=armeabi-v7a -DANDROID_ARM_NEON=TRUE -DKFR_SKIP_TESTS=ON -DCMAKE_BUILD_TYPE=Release
 
-  windows2022-clang17-android-arm64:
+  windows2022-clang-android-arm64:
     runs-on: windows-2022
     steps:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Tests
       shell: cmd
-      run: choco install llvm --version 17.0.6 --no-progress -y
+      run: |
+        choco install ninja --no-progress -y
+        echo y > "%TMP%\always_yes"
+        echo y >> "%TMP%\always_yes"
+        mkdir "%USERPROFILE%\.android"
+        echo > "%USERPROFILE%\.android\repositories.cfg"
+        call "%ANDROID_HOME%\tools\bin\sdkmanager.bat" "ndk-bundle" < %TMP%\always_yes
+        ci\run.cmd build-release -DCMAKE_TOOLCHAIN_FILE="%ANDROID_HOME%\ndk-bundle\build\cmake\android.toolchain.cmake" -DANDROID_ABI=arm64-v8a -DANDROID_ARM_NEON=TRUE -DKFR_SKIP_TESTS=ON -DCMAKE_BUILD_TYPE=Release
 
   macos13-xcode14-x86_64:
     runs-on: macos-13
