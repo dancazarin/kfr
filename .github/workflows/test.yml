@@ -1,17 +1,7 @@
 name: Tests
 on: push
 jobs:
-  ubuntu22-gcc11:
-    runs-on: ubuntu-22.04
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Tests
-      run: |
-        sudo apt-get update && sudo apt-get install -y ninja-build g++-11
-        ci/run.sh build-release -DKFR_ARCH=target -DCMAKE_CXX_COMPILER=g++-11 -DCMAKE_BUILD_TYPE=Release
-
-  ubuntu22-clang14:
+  ubuntu22-clang17-x86_64:
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout
@@ -22,9 +12,103 @@ jobs:
         TMP_DIR: ${{ runner.temp }}
       run: |
         set -e
-        sudo apt-get update && sudo apt-get install -y ninja-build clang-14
+        sudo apt-get update && sudo apt-get install -y ninja-build clang-17
         curl -o "$TMP_DIR/sde.tar.bz2" -L "$SDE_LINUX"
         mkdir "$TMP_DIR/sde-bin"
         tar -C "$TMP_DIR/sde-bin" -xjf "$TMP_DIR/sde.tar.bz2" --strip 1
         sudo ln -s $TMP_DIR/sde-bin/sde64 /usr/bin/sde
-        ci/run.sh build-release -DKFR_ENABLE_CAPI_BUILD=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DKFR_ARCH_TESTS=sse2,sse3,sse41,avx,avx2,avx512 -DKFR_ARCH=avx2 -DKFR_USE_SDE=ON -DCMAKE_CXX_COMPILER=clang++-14 -DCMAKE_BUILD_TYPE=Release
+        ci/run.sh build-release -DKFR_ENABLE_CAPI_BUILD=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DKFR_ARCH_TESTS=sse2,sse3,sse41,avx,avx2,avx512 -DKFR_ARCH=avx2 -DKFR_USE_SDE=ON -DCMAKE_CXX_COMPILER=clang++-17 -DCMAKE_BUILD_TYPE=Release
+
+  ubuntu22-clang17-arm:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Tests
+      run: |
+        set -e
+        sudo apt-get update && sudo apt-get install -y ninja-build g++-arm-linux-gnueabihf qemu qemu-system-arm qemu-user clang-17
+        ci/run.sh build-release -DENABLE_EXAMPLES=OFF -DCLANG_SUFFIX=-17 -DCMAKE_BUILD_TYPE=Release -DGCC_VER=11 -DCMAKE_TOOLCHAIN_FILE=../cmake/arm.cmake
+
+  ubuntu22-clang17-arm64:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Tests
+      run: |
+        set -e
+        sudo apt-get update && sudo apt-get install -y ninja-build g++-aarch64-linux-gnu qemu qemu-system-arm qemu-user clang-17
+        ci/run.sh build-release -DENABLE_EXAMPLES=OFF -DCLANG_SUFFIX=-17 -DCMAKE_BUILD_TYPE=Release -DGCC_VER=11 -DCMAKE_TOOLCHAIN_FILE=../cmake/aarch64.cmake
+
+  ubuntu22-gcc13-x86_64:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Tests
+      run: |
+        sudo apt-get update && sudo apt-get install -y ninja-build g++-13
+        ci/run.sh build-release -DKFR_ARCH=target -DCMAKE_CXX_COMPILER=g++-13 -DCMAKE_BUILD_TYPE=Release
+
+  windows2022-clang17-x86:
+    runs-on: windows-2022
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Tests
+      run: choco install llvm --version 17.0.6
+
+  windows2022-clang17-x86_64:
+    runs-on: windows-2022
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Tests
+      run: choco install llvm --version 17.0.6
+
+  windows2022-msvc2022-x86:
+    runs-on: windows-2022
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+  windows2022-msvc2022-x86_64:
+    runs-on: windows-2022
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+  windows2022-clang17-android-arm:
+    runs-on: windows-2022
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+  windows2022-clang17-android-arm64:
+    runs-on: windows-2022
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+  macos13-xcode14-x86_64:
+    runs-on: macos-13
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Tests
+      run: |
+        set -e
+        brew install ninja
+        ci/run.sh build-release -DKFR_ENABLE_CAPI_BUILD=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DKFR_ARCH_TESTS=sse42,avx -DKFR_ARCH=detect -DKFR_ENABLE_MULTIARCH=ON -DCMAKE_BUILD_TYPE=Release      
+  
+  macos13-xcode14-arm64:
+    runs-on: macos-13
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+  macos13-xcode14-ios-arm64:
+    runs-on: macos-13
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
