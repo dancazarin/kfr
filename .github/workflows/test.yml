@@ -1,0 +1,30 @@
+name: Tests
+on: push
+jobs:
+  ubuntu22-gcc11:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Tests
+      run: |
+        sudo apt-get update && sudo apt-get install -y ninja-build g++-11
+        ci/run.sh build-release -DKFR_ARCH=target -DCMAKE_CXX_COMPILER=g++-11 -DCMAKE_BUILD_TYPE=Release
+
+  ubuntu22-clang14:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Tests
+      env:
+        SDE_LINUX: ${{ secrets.SDE_LINUX }}
+        TMP_DIR: ${{ runner.temp }}
+      run: |
+        set -e
+        sudo apt-get update && sudo apt-get install -y ninja-build clang-14
+        curl -o "$TMP_DIR/sde.tar.bz2" -L "$SDE_LINUX"
+        mkdir "$TMP_DIR/sde-bin"
+        tar -C "$TMP_DIR/sde-bin" -xjf "$TMP_DIR/sde.tar.bz2" --strip 1
+        sudo ln -s $TMP_DIR/sde-bin/sde64 /usr/bin/sde
+        ci/run.sh build-release -DKFR_ENABLE_CAPI_BUILD=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DKFR_ARCH_TESTS=sse2,sse3,sse41,avx,avx2,avx512 -DKFR_ARCH=avx2 -DKFR_USE_SDE=ON -DCMAKE_CXX_COMPILER=clang++-14 -DCMAKE_BUILD_TYPE=Release
