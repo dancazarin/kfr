@@ -13,7 +13,7 @@ jobs:
       run: |
         set -e
         sudo apt-get update && sudo apt-get install -y ninja-build
-        wget -O - https://apt.llvm.org/llvm.sh | bash -s - 17
+        wget -O - https://apt.llvm.org/llvm.sh | sudo bash -s - 17
         curl -o "$TMP_DIR/sde.tar.bz2" -L "$SDE_LINUX"
         mkdir "$TMP_DIR/sde-bin"
         tar -C "$TMP_DIR/sde-bin" -xjf "$TMP_DIR/sde.tar.bz2" --strip 1
@@ -29,7 +29,7 @@ jobs:
       run: |
         set -e
         sudo apt-get update && sudo apt-get install -y ninja-build g++-arm-linux-gnueabihf qemu qemu-system-arm qemu-user
-        wget -O - https://apt.llvm.org/llvm.sh | bash -s - 17
+        wget -O - https://apt.llvm.org/llvm.sh | sudo bash -s - 17
         ci/run.sh build-release -DENABLE_EXAMPLES=OFF -DCLANG_SUFFIX=-17 -DCMAKE_BUILD_TYPE=Release -DGCC_VER=11 -DCMAKE_TOOLCHAIN_FILE=../cmake/arm.cmake
 
   ubuntu22-clang17-arm64:
@@ -41,7 +41,7 @@ jobs:
       run: |
         set -e
         sudo apt-get update && sudo apt-get install -y ninja-build g++-aarch64-linux-gnu qemu qemu-system-arm qemu-user
-        wget -O - https://apt.llvm.org/llvm.sh | bash -s - 17
+        wget -O - https://apt.llvm.org/llvm.sh | sudo bash -s - 17
         ci/run.sh build-release -DENABLE_EXAMPLES=OFF -DCLANG_SUFFIX=-17 -DCMAKE_BUILD_TYPE=Release -DGCC_VER=11 -DCMAKE_TOOLCHAIN_FILE=../cmake/aarch64.cmake
 
   ubuntu22-gcc13-x86_64:
