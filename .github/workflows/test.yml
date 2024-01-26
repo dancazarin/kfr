@@ -22,7 +22,7 @@ jobs:
     - name: Binaries
       uses: actions/upload-artifact@v4
       with:
-        name: dist
+        name: ubuntu22-clang17-x86_64
         path: build-release/dist
 
   ubuntu22-clang17-arm:
@@ -39,7 +39,7 @@ jobs:
     - name: Binaries
       uses: actions/upload-artifact@v4
       with:
-        name: dist
+        name: ubuntu22-clang17-arm
         path: build-release/dist
 
   ubuntu22-clang17-arm64:
@@ -56,7 +56,7 @@ jobs:
     - name: Binaries
       uses: actions/upload-artifact@v4
       with:
-        name: dist
+        name: ubuntu22-clang17-arm64
         path: build-release/dist
       
   ubuntu22-gcc13-x86_64:
@@ -71,7 +71,7 @@ jobs:
     - name: Binaries
       uses: actions/upload-artifact@v4
       with:
-        name: dist
+        name: ubuntu22-gcc13-x86_64
         path: build-release/dist
 
   windows2022-clang17-x86:
@@ -96,7 +96,7 @@ jobs:
     - name: Binaries
       uses: actions/upload-artifact@v4
       with:
-        name: dist
+        name: windows2022-clang17-x86
         path: build-release/dist
 
   windows2022-clang17-x86_64:
@@ -120,7 +120,7 @@ jobs:
     - name: Binaries
       uses: actions/upload-artifact@v4
       with:
-        name: dist
+        name: windows2022-clang17-x86_64
         path: build-release/dist
 
   windows2022-msvc2022-x86:
@@ -143,7 +143,7 @@ jobs:
     - name: Binaries
       uses: actions/upload-artifact@v4
       with:
-        name: dist
+        name: windows2022-msvc2022-x86
         path: build-release/dist
 
   windows2022-msvc2022-x86_64:
@@ -166,7 +166,7 @@ jobs:
     - name: Binaries
       uses: actions/upload-artifact@v4
       with:
-        name: dist
+        name: windows2022-msvc2022-x86_64
         path: build-release/dist
 
   windows2022-clang-android-arm:
@@ -182,7 +182,7 @@ jobs:
     - name: Binaries
       uses: actions/upload-artifact@v4
       with:
-        name: dist
+        name: windows2022-clang-android-arm
         path: build-release/dist
 
   windows2022-clang-android-arm64:
@@ -198,7 +198,7 @@ jobs:
     - name: Binaries
       uses: actions/upload-artifact@v4
       with:
-        name: dist
+        name: windows2022-clang-android-arm64
         path: build-release/dist
 
   macos13-xcode14-x86_64:
@@ -214,7 +214,7 @@ jobs:
     - name: Binaries
       uses: actions/upload-artifact@v4
       with:
-        name: dist
+        name: macos13-xcode14-x86_64
         path: build-release/dist  
 
   macos13-xcode14-ios-arm64:
@@ -230,5 +230,5 @@ jobs:
     - name: Binaries
       uses: actions/upload-artifact@v4
       with:
-        name: dist
+        name: macos13-xcode14-ios-arm64
         path: build-release/dist  
