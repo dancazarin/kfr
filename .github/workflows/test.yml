@@ -137,13 +137,8 @@ jobs:
     - name: Tests
       shell: cmd
       run: |
-        choco install ninja --no-progress -y
-        echo y > "%TMP%\always_yes"
-        echo y >> "%TMP%\always_yes"
-        mkdir "%USERPROFILE%\.android"
-        echo > "%USERPROFILE%\.android\repositories.cfg"
-        call "%ANDROID_HOME%\tools\bin\sdkmanager.bat" "ndk-bundle" < %TMP%\always_yes        
-        ci\run.cmd build-release -DCMAKE_MAKE_PROGRAM=C:\ProgramData\chocolatey\lib\ninja\tools\ninja.exe -DCMAKE_TOOLCHAIN_FILE="%ANDROID_HOME%\ndk-bundle\build\cmake\android.toolchain.cmake" -DANDROID_ABI=armeabi-v7a -DANDROID_ARM_NEON=TRUE -DKFR_SKIP_TESTS=ON -DCMAKE_BUILD_TYPE=Release
+        choco install ninja --no-progress -y   
+        ci\run.cmd build-release -DCMAKE_MAKE_PROGRAM=C:\ProgramData\chocolatey\lib\ninja\tools\ninja.exe -DCMAKE_TOOLCHAIN_FILE="%ANDROID_NDK%\build\cmake\android.toolchain.cmake" -DANDROID_ABI=armeabi-v7a -DANDROID_ARM_NEON=TRUE -DKFR_SKIP_TESTS=ON -DCMAKE_BUILD_TYPE=Release
 
   windows2022-clang-android-arm64:
     runs-on: windows-2022
@@ -154,12 +149,7 @@ jobs:
       shell: cmd
       run: |
         choco install ninja --no-progress -y
-        echo y > "%TMP%\always_yes"
-        echo y >> "%TMP%\always_yes"
-        mkdir "%USERPROFILE%\.android"
-        echo > "%USERPROFILE%\.android\repositories.cfg"
-        call "%ANDROID_HOME%\tools\bin\sdkmanager.bat" "ndk-bundle" < %TMP%\always_yes
-        ci\run.cmd build-release -DCMAKE_MAKE_PROGRAM=C:\ProgramData\chocolatey\lib\ninja\tools\ninja.exe -DCMAKE_TOOLCHAIN_FILE="%ANDROID_HOME%\ndk-bundle\build\cmake\android.toolchain.cmake" -DANDROID_ABI=arm64-v8a -DANDROID_ARM_NEON=TRUE -DKFR_SKIP_TESTS=ON -DCMAKE_BUILD_TYPE=Release
+        ci\run.cmd build-release -DCMAKE_TOOLCHAIN_FILE="%ANDROID_NDK%\build\cmake\android.toolchain.cmake" -DANDROID_ABI=arm64-v8a -DANDROID_ARM_NEON=TRUE -DKFR_SKIP_TESTS=ON -DCMAKE_BUILD_TYPE=Release
 
   macos13-xcode14-x86_64:
     runs-on: macos-13
